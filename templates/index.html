@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- end of header area -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2>Check Eligibility Now</h2>
+                    <nav aria-label="breadcrumb">
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- end of page header -->
+    {#    {% if messages %}#}
+    {#        {% for message in messages %}#}
+    {#            <div class="text-center alert alert-{{ message.tags }}">#}
+    {#                {{ message|safe }}#}
+    {#            </div>#}
+    {#        {% endfor %}#}
+    {#    {% endif %}#}
+
+    <div class="alert alert-dismissible" role="alert" style="display:none;">
+        <strong>Warning!</strong>
+        <p>Message here.</p>
+    </div>
+
+    <section class="section-padding contact-us-padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                    <form id="form">
+                        {% csrf_token %}
+                        <div class="row list-input">
+                            {% for field in form %}
+                                <div class="col-md-6">
+                                    <div class="single-get-touch">
+                                        {{ field.errors }}
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="row">
+                                <div class="col-lg-3 mb-1">
+                                    <div class="single-get-touch">
+                                        <button id="svm" type="submit" name="submit" class="btn btn-default btn-sm">SVM
+                                            Now
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="single-get-touch">
+                                        <button id="deep" type="submit" name="submit" class="btn btn-default btn-sm">
+                                            Deep Learning
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="single-get-touch">
+                                        <button id="logistic" type="submit" name="submit"
+                                                class="btn btn-default btn-sm">Logistic
+                                            Regression
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="single-get-touch">
+                                        <button id="decision" type="submit" name="submit"
+                                                class="btn btn-default btn-sm">Decision Tree
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="single-get-touch">
+                                        <button id="random" type="submit" name="submit" class="btn btn-default btn-sm">
+                                            Random Forest
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let form = document.getElementById("form");
+        form.addEventListener("submit", handleSubmit);
+
+        const $message = $('.message-notification');
+
+        function handleSubmit(event) {
+            event.preventDefault()
+            const data = Object.fromEntries(new FormData(event.target).entries());
+            submitter = event.submitter.id
+            switch (submitter) {
+                case "svm":
+                    console.log("svm")
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'svm' %}",
+                        data: data,
+                        success: (data) => {
+                            console.log(data.message)
+                            console.log(data.title)
+                            console.log(data.type)
+                            {#update_messages(data);#}
+                            const {title, message, type} = data;
+                            ShowAlert(title, message, type);
+                        }
+                    });
+                    break;
+                case "deep":
+                    console.log("deep")
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'deep' %}",
+                        data: data,
+                        success: (data) => {
+                            console.log(data.message)
+                            console.log(data.title)
+                            console.log(data.type)
+                            {#update_messages(data);#}
+                            const {title, message, type} = data;
+                            ShowAlert(title, message, type);
+                        }
+                    });
+                    break;
+                case "logistic":
+                    console.log("logistic")
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'logistic' %}",
+                        data: data,
+                        success: (data) => {
+                            console.log(data.message)
+                            console.log(data.title)
+                            console.log(data.type)
+                            {#update_messages(data);#}
+                            const {title, message, type} = data;
+                            ShowAlert(title, message, type);
+                        }
+                    });
+                    break;
+                case "decision":
+                    console.log("decision")
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'decision' %}",
+                        data: data,
+                        success: (data) => {
+                            console.log(data.message)
+                            console.log(data.title)
+                            console.log(data.type)
+                            {#update_messages(data);#}
+                            const {title, message, type} = data;
+                            ShowAlert(title, message, type);
+                        }
+                    });
+                    break;
+                case "random":
+                    console.log("random")
+                    $.ajax({
+                        type: 'POST',
+                        url: "{% url 'random' %}",
+                        data: data,
+                        success: (data) => {
+                            console.log(data.message)
+                            console.log(data.title)
+                            console.log(data.type)
+                            {#update_messages(data);#}
+                            const {title, message, type} = data;
+                            ShowAlert(title, message, type);
+                        }
+                    });
+                    break;
+            }
+
+        }
+
+        function ShowAlert(msg_title, msg_body, msg_type) {
+            var AlertMsg = $('div[role="alert"]');
+            $(AlertMsg).find('strong').html(msg_title);
+            $(AlertMsg).find('p').html(msg_body);
+            $(AlertMsg).removeAttr('class');
+            $(AlertMsg).addClass('alert alert-' + msg_type);
+            $(AlertMsg).show();
+        }
+    </script>
+{% endblock content %}
+
+
